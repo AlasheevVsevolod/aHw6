@@ -16,23 +16,29 @@ namespace Advanced_Lesson_7_Delegates
         {
             int num1 = 100, num2 = 200;
             Func<int, int, double> op = null;
+            bool cycle = true;
 
-            switch (Console.ReadLine())
+            while(cycle)
             {
-                case "+":
-                    //op = Sum;
-                    //Console.WriteLine(op(num1, num2));
-                    op = (var1, var2) =>
-                    {
-                        return var1 + var2;
-                    };
-                    Console.WriteLine(op(num1, num2));
-                    break;
+                switch (Console.ReadLine())
+                {
+                    case "+":
+                        //op = Sum;
+                        //Console.WriteLine(op(num1, num2));
+                        op = (var1, var2) => var1 + var2;
 
-                case "-":
-                    op = Sub;
-                    Console.WriteLine(op(num1, num2));
-                    break;
+                        Console.WriteLine(op(num1, num2));
+                        break;
+
+                    case "-":
+                        op = Sub;
+                        Console.WriteLine(op(num1, num2));
+                        break;
+
+                    case "q":
+                        cycle = false;
+                        break;
+                }
             }
         }
 
@@ -54,9 +60,60 @@ namespace Advanced_Lesson_7_Delegates
         /// Замена пробелов на подчеркивание.
         /// Продемонстрировать работу расширяющего метода.
         /// </summary>
+        /// 
         public static void L7P2_StringFormater()
         {
+            List<string> strList = new List<string>
+            {
+                "qwert qwe qwe",
+                "1W_sglj osogb5_=",
+                "2dfgd=afja fh+eg1 3sgkфар"
+            };
 
+            strList.FormatStringList(ToUpper);
+            PrintList(strList);
+
+            strList.FormatStringList(ToLower);
+            PrintList(strList);
+
+            strList.FormatStringList(Replace);
+            PrintList(strList);
+        }
+
+        public static void PrintList(List<string> tmpList)
+        {
+            foreach (var item in tmpList)
+            {
+                Console.WriteLine(item);
+            }
+            Console.WriteLine();
+        }
+
+        public static string ToUpper(string str)
+        {
+            return str.ToUpper();
+        }
+
+        public static string ToLower(string str)
+        {
+            return str.ToLower();
+        }
+
+        public static string Replace(string str)
+        {
+            return str.Replace(' ', '_');
+        }
+    }
+
+    public static class ListStringExtension
+    {
+        public static List<string> FormatStringList(this List<string> str, Func<string, string> tmpDelegate)
+        {
+            for (int i = 0; i < str.Count; i++)
+            {
+                str[i] = tmpDelegate(str[i]);
+            }
+            return str;
         }
     }
 }
